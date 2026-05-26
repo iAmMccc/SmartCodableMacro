@@ -1,5 +1,4 @@
 import UIKit
-import SmartCodable
 import SmartCodableMacro
 
 // MARK: - 演示用模型
