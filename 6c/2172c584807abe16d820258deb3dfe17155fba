@@ -1,0 +1,21 @@
+Sources/SmartCodableMacro/Exports.swift
+  s_4db445a45d5f70::t_475ad73e431fc4 1-4
+Tests/SmartCodableMacroTests/ExportedImportSmokeTests.swift
+  s_4db445a45d5f70::t_7fb485cadd41ba 1-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.0",
+  "base_commit_sha": "6c2172c584807abe16d820258deb3dfe17155fba",
+  "prompts": {},
+  "sessions": {
+    "s_4db445a45d5f70": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8d212a38-af79-45e9-a320-ba87ed7a8421",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "iAmMccc <562863544@qq.com>"
+    }
+  }
+}
