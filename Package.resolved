@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "smartcodable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/iAmMccc/SmartCodable.git",
+      "state" : {
+        "revision" : "475e5dbff8cb22a74741a355c9c39d74f3a6c8e7",
+        "version" : "7.0.0-beta.1"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax",
+      "state" : {
+        "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
+        "version" : "602.0.0"
+      }
+    }
+  ],
+  "version" : 2
+}
