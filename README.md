@@ -10,13 +10,10 @@ The official inheritance extension for [SmartCodable](https://github.com/iAmMccc
 
 Requirements: Swift 5.9+ / Xcode 15+.
 
-> 🚧 **Currently in beta.** The latest version is `1.0.0-beta.1`, paired with SmartCodable `7.0.0-beta.1`.
-> Use `exact:` to opt in — SPM's `from:` does not match prerelease versions.
-
 ```swift
 // Package.swift
 dependencies: [
-    .package(url: "https://github.com/iAmMccc/SmartCodableMacro.git", exact: "1.0.0-beta.1")
+    .package(url: "https://github.com/iAmMccc/SmartCodableMacro.git", branch: "main")
 ],
 targets: [
     .target(
@@ -25,14 +22,6 @@ targets: [
             .product(name: "SmartCodableMacro", package: "SmartCodableMacro")
         ]
     )
-]
-```
-
-Once 1.0 is stable, switch to:
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/iAmMccc/SmartCodableMacro.git", from: "1.0.0")
 ]
 ```
 

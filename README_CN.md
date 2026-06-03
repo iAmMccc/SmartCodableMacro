@@ -10,13 +10,10 @@
 
 要求：Swift 5.9+ / Xcode 15+。
 
-> 🚧 **当前处于 beta 阶段。** 最新版本为 `1.0.0-beta.1`，配套依赖 SmartCodable `7.0.0-beta.1`。
-> 由于 SPM 的 `from:` 不会匹配 prerelease，请使用 `exact:` 引入。
-
 ```swift
 // Package.swift
 dependencies: [
-    .package(url: "https://github.com/iAmMccc/SmartCodableMacro.git", exact: "1.0.0-beta.1")
+    .package(url: "https://github.com/iAmMccc/SmartCodableMacro.git", branch: "main")
 ],
 targets: [
     .target(
@@ -25,14 +22,6 @@ targets: [
             .product(name: "SmartCodableMacro", package: "SmartCodableMacro")
         ]
     )
-]
-```
-
-正式版发布后，可改为：
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/iAmMccc/SmartCodableMacro.git", from: "1.0.0")
 ]
 ```
 
