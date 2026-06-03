@@ -33,10 +33,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        // beta 期间使用 exact —— SPM 的 from: 不会匹配 prerelease 版本。
-        // SmartCodable 7.0 正式版发布后，可改为：
-        // .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "7.0.0")
-        .package(url: "https://github.com/iAmMccc/SmartCodable.git", exact: "7.0.0-beta.1"),
+         .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "7.0.0")
         .package(url: "https://github.com/swiftlang/swift-syntax", from: swiftSyntaxVersion)
     ],
     targets: [

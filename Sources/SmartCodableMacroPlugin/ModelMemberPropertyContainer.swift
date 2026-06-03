@@ -2,7 +2,7 @@
 //  ModelMemberPropertyContainer.swift
 //  SmartCodable
 //
-//  Created by qixin on 2025/5/14.
+//  Created by Mccc on 2025/5/14.
 //
 
 import SwiftSyntax

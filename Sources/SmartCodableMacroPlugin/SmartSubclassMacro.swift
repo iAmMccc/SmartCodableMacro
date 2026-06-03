@@ -2,7 +2,7 @@
 //  SmartSubclassMacro.swift
 //  Mccc
 //
-//  Created by qixin on 2025/4/24.
+//  Created by Mccc on 2025/4/24.
 //
 
 import SwiftCompilerPlugin
