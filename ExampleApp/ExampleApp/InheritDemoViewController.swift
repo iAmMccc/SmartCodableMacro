@@ -33,7 +33,7 @@ class StudentModel: BaseModel {
     var location: String = ""
     var sex: Sex = .man
     var birthDate: Date?
-    @SmartAny var hobbys: [Any] = []
+    @SmartAny var hobbies: [Any] = []
 
     override static func mappingForKey() -> [SmartKeyTransformer]? {
         let trans = [CodingKeys.location <--- "sub_location"]
@@ -81,7 +81,7 @@ final class InheritDemoViewController: UIViewController {
       "sex": 1,
       "birthDate": "2000-01-01",
       "date": "2025-05-06",
-      "hobbys": ["ball", "TV"]
+      "hobbies": ["ball", "TV"]
     }
     """
 
@@ -168,7 +168,7 @@ final class InheritDemoViewController: UIViewController {
         lines.append("birthDate = \(model.birthDate.map { "\($0)" } ?? "nil")")
         lines.append("date      = \(model.date.map { "\($0)" } ?? "nil")")
         lines.append("desc      = \(model.desc.map { "\($0)" } ?? "nil")")
-        lines.append("hobbys    = \(model.hobbys)")
+        lines.append("hobbies   = \(model.hobbies)")
         lines.append("")
         lines.append("---- 重新编码 JSON ----")
         lines.append(model.toJSONString(prettyPrint: true) ?? "")
