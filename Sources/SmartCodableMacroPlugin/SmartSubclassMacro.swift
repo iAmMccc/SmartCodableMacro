@@ -5,11 +5,9 @@
 //  Created by Mccc on 2025/4/24.
 //
 
-import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
-
 
 /// A macro that automatically implements SmartCodable inheritance support
 public struct SmartSubclassMacro: MemberMacro {
@@ -49,22 +47,22 @@ public struct SmartSubclassMacro: MemberMacro {
         providingMembersOf declaration: some DeclGroupSyntax,
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
-        
+
         guard let classDecl = declaration.as(ClassDeclSyntax.self) else {
-            throw MacroError("@SmartSubclassMacro can only be applied to class declarations")
+            throw MacroError("@SmartSubclass can only be applied to class declarations")
         }
 
         guard let inheritedNames = classDecl.inheritanceClause?.inheritedTypes,
               !inheritedNames.isEmpty else {
-            throw MacroError("@SmartSubclassMacro requires the class to inherit from a parent class")
+            throw MacroError("@SmartSubclass requires the class to inherit from a parent class")
         }
 
         // 获取类的属性
         let properties = try extractProperties(from: classDecl)
         let memberAccess = synthesizedMemberAccess(for: classDecl)
-        
+
         var members: [DeclSyntax] = []
-        
+
         // 生成CodingKeys枚举
         members.append(generateCodingKeysEnum(for: properties))
 
@@ -73,7 +71,6 @@ public struct SmartSubclassMacro: MemberMacro {
 
         // 生成encode(to:)方法
         members.append(generateEncodeToEncoder(for: properties, access: memberAccess))
-        
 
         if hasRequiredInitializer(classDecl) {
             return members
@@ -83,11 +80,11 @@ public struct SmartSubclassMacro: MemberMacro {
             return members
         }
     }
-      
+
     // 辅助方法：提取类的属性
     private static func extractProperties(from classDecl: ClassDeclSyntax) throws -> [ModelMemberProperty] {
         var properties: [ModelMemberProperty] = []
-          
+
         for member in classDecl.memberBlock.members {
             // 只处理变量声明
             guard let varDecl = member.decl.as(VariableDeclSyntax.self),
@@ -104,23 +101,22 @@ public struct SmartSubclassMacro: MemberMacro {
             if isLazy {
                 continue
             }
-              
+
             // 遍历所有绑定
             for binding in varDecl.bindings {
                 // 确保有标识符和类型注解
                 let identifier = try binding.getIdentifierPattern()
                 let baseType = try binding.getVariableType()
-                  
+
                 let name = identifier.identifier.text
 
                 // 检查是否是存储属性（有初始值或没有getter/setter）
                 let isStored = binding.accessorBlock == nil ||
                                (binding.accessorBlock?.accessors.as(AccessorDeclListSyntax.self) == nil &&
                                 binding.accessorBlock?.accessors.as(CodeBlockItemListSyntax.self) == nil)
-                  
+
                 // 只添加存储属性
                 if isStored {
-                    
                     // 判断是否使用了属性包装器
                     var effectiveType = baseType
                     var isWrapped = false
@@ -129,39 +125,38 @@ public struct SmartSubclassMacro: MemberMacro {
                         for attr in attrs {
                             if let attrSyntax = attr.as(AttributeSyntax.self),
                                let wrapperName = attrSyntax.attributeName.as(IdentifierTypeSyntax.self)?.name.text {
-                                
+
                                 // 如果属性使用了 @objc 修饰，则跳过它作为“属性包装器”处理
                                 if wrapperName == "objc" { continue }
-                                
+
                                 effectiveType = "\(wrapperName)<\(baseType)>"
                                 isWrapped = true
                                 break
                             }
                         }
                     }
-                    
+
                     properties.append(ModelMemberProperty(name: name, type: effectiveType, isWrapped: isWrapped, isStored: true))
                 }
             }
         }
-          
+
         return properties
     }
 
-    
     // 辅助方法：生成CodingKeys枚举
     private static func generateCodingKeysEnum(for properties: [ModelMemberProperty]) -> DeclSyntax {
         let caseDeclarations = properties.map { property in
             "case \(property.codingKeyName)"
         }.joined(separator: "\n")
-          
+
         return """
         enum CodingKeys: CodingKey {
             \(raw: caseDeclarations)
         }
         """
     }
-      
+
     // 辅助方法：生成init(from:)方法
     private static func generateInitFromDecoder(
         for properties: [ModelMemberProperty],
@@ -170,7 +165,7 @@ public struct SmartSubclassMacro: MemberMacro {
         let decodingStatements = properties.map { property in
             let propertyName = property.accessName
             let propertyType = property.type
-              
+
             // 处理可选类型
             if propertyType.hasSuffix("?") {
                 let baseType = propertyType.dropLast()
@@ -179,17 +174,17 @@ public struct SmartSubclassMacro: MemberMacro {
                 return "self.\(propertyName) = try container.decodeIfPresent(\(propertyType).self, forKey: .\(property.codingKeyName)) ?? self.\(propertyName)"
             }
         }.joined(separator: "\n")
-          
+
         return """
         \(raw: access.prefix)required init(from decoder: Decoder) throws {
             try super.init(from: decoder)
-              
+
             let container = try decoder.container(keyedBy: CodingKeys.self)
             \(raw: decodingStatements)
         }
         """
     }
-      
+
     // 辅助方法：生成encode(to:)方法
     private static func generateEncodeToEncoder(
         for properties: [ModelMemberProperty],
@@ -202,18 +197,17 @@ public struct SmartSubclassMacro: MemberMacro {
                 return "try container.encode(\(property.accessName), forKey: .\(property.codingKeyName))"
             }
         }.joined(separator: "\n")
-          
+
         return """
         \(raw: access.prefix)override func encode(to encoder: Encoder) throws {
             try super.encode(to: encoder)
-              
+
             var container = encoder.container(keyedBy: CodingKeys.self)
             \(raw: encodingStatements)
         }
         """
     }
-      
-    
+
     // 检查是否已存在required init()
     private static func hasRequiredInitializer(_ classDecl: ClassDeclSyntax) -> Bool {
         for member in classDecl.memberBlock.members {
@@ -225,7 +219,7 @@ public struct SmartSubclassMacro: MemberMacro {
         }
         return false
     }
-    
+
     // 辅助方法：生成required init()方法
     private static func generateRequiredInit(access: SynthesizedMemberAccess) -> DeclSyntax {
         return """

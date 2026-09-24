@@ -33,7 +33,7 @@ let package = Package(
         )
     ],
     dependencies: [
-         .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "7.0.0")
+        .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "7.0.0"),
         .package(url: "https://github.com/swiftlang/swift-syntax", from: swiftSyntaxVersion)
     ],
     targets: [
